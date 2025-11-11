@@ -15,7 +15,6 @@
         android:backgroundTint="#00BCD4"
         android:ems="10"
         android:inputType="text"
-        android:text="Usuari:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"

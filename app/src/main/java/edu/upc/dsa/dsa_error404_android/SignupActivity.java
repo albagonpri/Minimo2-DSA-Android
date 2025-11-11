@@ -48,7 +48,7 @@ public class SignupActivity extends AppCompatActivity {
             Toast.makeText(this, "Dades incorrectes.", Toast.LENGTH_SHORT).show();
             return;
         }
-        Toast.makeText(this, "Registrando usuario: " + usuari, Toast.LENGTH_LONG).show();
-     finish();
+        Toast.makeText(this, "Registrant usuari: " + usuari, Toast.LENGTH_LONG).show();
+        finish();
     }
 }
