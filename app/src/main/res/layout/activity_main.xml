@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/purple_200"
+    android:background="@color/azul_claro"
     tools:context=".MainActivity">
 
     <TextView
@@ -17,15 +17,15 @@
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.217" />
+        app:layout_constraintVertical_bias="0.264" />
 
     <Button
         android:id="@+id/Login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#009688"
         android:fontFamily="sans-serif-smallcaps"
         android:text="Log in"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -40,6 +40,7 @@
         android:id="@+id/Singup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#009688"
         android:fontFamily="sans-serif-smallcaps"
         android:text="Sing up"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
