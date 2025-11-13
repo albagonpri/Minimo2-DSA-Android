@@ -1,5 +1,6 @@
 package edu.upc.dsa.dsa_error404_android;
 
+import android.content.Intent; // <-- 1. AFEGIR AQUEST IMPORT
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity {
 
     EditText etUsername, etPassword;
-    Button btnLogin;
+    Button btnLogin, btnBackToMain; // <-- 2. AFEGIR LA VARIABLE PER AL BOTÓ
     ApiService apiService;
 
     public static final String BASE_URL = "http://10.0.2.2:8080/dsaApp/";
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLoginSubmit);
+        btnBackToMain = findViewById(R.id.btnBackToMain); // <-- 3. ENLLAÇAR EL BOTÓ (amb l'ID del XML)
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -54,6 +56,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 handleLogin();
+            }
+        });
+
+        // <-- 4. AFEGIR LA LÒGICA DEL BOTÓ DE TORNAR -->
+        btnBackToMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear un Intent per obrir MainActivity
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish(); // Tanca LoginActivity
             }
         });
     }

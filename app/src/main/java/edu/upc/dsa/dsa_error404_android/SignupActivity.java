@@ -1,5 +1,6 @@
 package edu.upc.dsa.dsa_error404_android;
 
+import android.content.Intent; // <-- 1. AFEGIR AQUEST IMPORT
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class SignupActivity extends AppCompatActivity {
     EditText etUsuari, etPassword;
-    Button btnSignUp;
+    Button btnSignUp, btnBackToMain; // <-- 2. AFEGIR LA VARIABLE PER AL BOTÓ
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +31,23 @@ public class SignupActivity extends AppCompatActivity {
         etUsuari = findViewById(R.id.editUsuari);
         etPassword = findViewById(R.id.EditPassword);
         btnSignUp = findViewById(R.id.SignUp);
+        btnBackToMain = findViewById(R.id.btnBackToMain); // <-- 3. ENLLAÇAR EL NOU BOTÓ
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleSignUp();
+            }
+        });
+
+        // <-- 4. AFEGIR LA LÒGICA DEL BOTÓ DE TORNAR -->
+        btnBackToMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear un Intent per obrir MainActivity
+                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish(); // Tanca SignupActivity
             }
         });
 
