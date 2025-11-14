@@ -22,9 +22,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import edu.upc.dsa.dsa_error404_android.User;
-import edu.upc.dsa.dsa_error404_android.Credentials;
-
 public class LoginActivity extends AppCompatActivity {
 
     EditText etUsername, etPassword;
@@ -93,6 +90,9 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("username", user.getName());
+                    editor.putString("userId", user.getId());
+                    editor.putInt("monedas", user.getMonedas());
+                    editor.putInt("vidaInicial", user.getVidaInicial());
                     editor.apply();
 
                     // 5. Abrir la actividad de la tienda (o la principal del juego)
