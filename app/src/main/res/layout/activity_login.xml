@@ -5,84 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="32dp"
+    android:padding="16dp"
     android:gravity="center"
-    android:background="@drawable/Fondo"
+    android:background="@color/azul_claro"
     tools:context=".LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:text="INICI DE SESSIÓ"
-        android:textSize="32sp"
-        android:fontFamily="monospace"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:shadowColor="#00FFFF"
-        android:shadowRadius="15"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:padding="8dp"/>
+        android:layout_marginBottom="24dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Login"
+        android:textColor="@color/teal_700"
+        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edittext_neon_bg"
-        android:hint="Usuari o email"
+        android:backgroundTint="@color/teal_700"
+        android:hint="Usuario:"
         android:inputType="text"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/darker_gray"
-        android:padding="12dp"
-        android:layout_marginBottom="12dp"/>
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edittext_neon_bg"
-        android:hint="Contrasenya"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/teal_700"
+        android:hint="Contraseña:"
         android:inputType="textPassword"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/darker_gray"
-        android:padding="12dp"
-        android:layout_marginBottom="12dp"/>
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray" />
 
     <Button
         android:id="@+id/btnLoginSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_neon_bg"
-        android:text="ENTRAR"
-        android:textColor="#FFFFFF"
-        android:shadowColor="#00FFFF"
-        android:shadowRadius="8"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-smallcaps"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"/>
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/teal_700"
+        android:text="Entrar" />
 
     <Button
         android:id="@+id/btnBackToMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/button_neon_bg"
-        android:text="TORNAR"
-        android:textColor="#FFFFFF"
-        android:shadowColor="#00FFFF"
-        android:shadowRadius="8"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-smallcaps"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"/>
+        android:backgroundTint="@color/teal_700"
+        android:text="Volver" />
 
 </LinearLayout>
