@@ -3,16 +3,11 @@ package edu.upc.dsa.dsa_error404_android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,35 +15,29 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import edu.upc.dsa.dsa_error404_android.User;
-import edu.upc.dsa.dsa_error404_android.Credentials;
-
 public class SignupActivity extends AppCompatActivity {
-    EditText etUsuari, etEmail, etPassword, etPassword2;
+
+    EditText etUsuari, etEmail, etPassword, etRepeatPassword;
     Button btnSignUp, btnBackToMain;
     ApiService apiService;
 
-    //public static final String BASE_URL = "https://dsa4.upc.edu/register.html";
     public static final String BASE_URL = "http://10.0.2.2:8080/dsaApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signup);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
+        // Assignació de components
         etUsuari = findViewById(R.id.editUsuari);
         etEmail = findViewById(R.id.editEmail);
         etPassword = findViewById(R.id.EditPassword);
-        etPassword2 = findViewById(R.id.editPassword2);
+        etRepeatPassword = findViewById(R.id.editRepeatPassword);
+
         btnSignUp = findViewById(R.id.SignUp);
         btnBackToMain = findViewById(R.id.btnBackToMain);
 
+        // Configurar Retrofit
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -56,20 +45,10 @@ public class SignupActivity extends AppCompatActivity {
 
         apiService = retrofit.create(ApiService.class);
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleSignUp();
-            }
-        });
-
-        btnBackToMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        btnSignUp.setOnClickListener(v -> handleSignUp());
+        btnBackToMain.setOnClickListener(v -> {
+            startActivity(new Intent(SignupActivity.this, MainActivity.class));
+            finish();
         });
     }
 
@@ -77,56 +56,56 @@ public class SignupActivity extends AppCompatActivity {
         String usuari = etUsuari.getText().toString();
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
-        String password2 = etPassword2.getText().toString();
+        String repeatPassword = etRepeatPassword.getText().toString();
 
-        if (usuari.isEmpty() || email.isEmpty() || password.isEmpty() || password2.isEmpty()) {
-            Toast.makeText(this, "Datos incorrectos.", Toast.LENGTH_SHORT).show();
+        // Validació bàsica
+        if (usuari.isEmpty() || email.isEmpty() || password.isEmpty() || repeatPassword.isEmpty()) {
+            Toast.makeText(this, "Omple tots els camps.", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Validació email
         String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
-
         if (!email.matches(emailRegex)) {
-            Toast.makeText(this,"El formato del correo no es válido.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "El format del correu no és vàlid.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!password.equals(password2)){
-            Toast.makeText(this, "Contraseñas incorrectos.", Toast.LENGTH_SHORT).show();
+        // Validació contrasenyes
+        if (!password.equals(repeatPassword)) {
+            Toast.makeText(this, "Les contrasenyes no coincideixen.", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Crear objecte credentials
         Credentials credentials = new Credentials();
         credentials.setNombre(usuari);
-        credentials.setPassword(password);
         credentials.setEmail(email);
+        credentials.setPassword(password);
 
+        // Crida al servidor
         Call<User> call = apiService.registerUser(credentials);
-
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    // Codi 201
-                    Toast.makeText(SignupActivity.this, "Usuario registrado! Haz login.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this, "Usuari registrat! Ja pots iniciar sessió.", Toast.LENGTH_LONG).show();
                     finish();
-
-                } else if (response.code() == 409) {
-                    // Codi 409
-                    Log.e("SignupActivity", "Error en onResponse: " + response.code());
-                    Toast.makeText(SignupActivity.this, "Error: El usuario ya existe", Toast.LENGTH_LONG).show();
-
-                } else {
-                    // Altres errors
-                    Log.e("SignupActivity", "Error en onResponse: " + response.code());
-                    Toast.makeText(SignupActivity.this, "Error desconocido en el registro", Toast.LENGTH_LONG).show();
+                }
+                else if (response.code() == 409) {
+                    Log.e("SignupActivity", "Usuari ja existeix: " + response.code());
+                    Toast.makeText(SignupActivity.this, "Error: L'usuari ja existeix.", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Log.e("SignupActivity", "Error desconegut: " + response.code());
+                    Toast.makeText(SignupActivity.this, "Error desconegut en el registre.", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(SignupActivity.this, "Fallo de connexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("SignupActivity", "Error en onFailure", t);
+                Toast.makeText(SignupActivity.this, "Fallo de connexió: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("SignupActivity", "Error onFailure", t);
             }
         });
     }
