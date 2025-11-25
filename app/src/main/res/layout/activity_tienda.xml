@@ -6,105 +6,109 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TiendaActivity"
-    android:background="@color/azul_claro">
+    android:background="@drawable/fondo">
 
-    <Button
-        android:id="@+id/btnComprarEscudo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="#121111"
-        android:backgroundTint="#020202"
-        android:text="comprar"
-        app:iconTint="#0D0B0B"
-        app:layout_constraintBottom_toTopOf="@+id/btnComprarPocion"
-        app:layout_constraintTop_toBottomOf="@+id/btnComprarEspada"
-        tools:layout_editor_absoluteX="234dp" />
-
-    <Button
-        android:id="@+id/btnComprarPocion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#121111"
-        android:backgroundTint="#020202"
-        android:text="comprar"
-        app:iconTint="#0D0B0B"
-        tools:layout_editor_absoluteX="233dp"
-        tools:layout_editor_absoluteY="376dp" />
-
-    <TextView
-        android:id="@+id/pocion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="Pocion"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintEnd_toStartOf="@+id/btnComprarPocion"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/escudo"
-        app:layout_constraintTop_toBottomOf="@+id/escudo" />
-
-    <TextView
-        android:id="@+id/escudo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="92dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="Escudo"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintEnd_toStartOf="@+id/btnComprarEscudo"
-        app:layout_constraintStart_toStartOf="@+id/Espada"
-        app:layout_constraintTop_toBottomOf="@+id/Espada" />
-
-    <TextView
-        android:id="@+id/Espada"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="Espada"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintEnd_toStartOf="@+id/btnComprarEspada"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="221dp" />
-
+    <!-- MONEDAS -->
     <TextView
         android:id="@+id/textViewMonedas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Monedes: 0"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="18sp"
         android:fontFamily="sans-serif-medium"
-        android:text="Monedas:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.727"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.095" />
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp" />
 
-    <Button
-        android:id="@+id/btnBackToInicioLogIn"
+    <!-- ESPADA -->
+    <TextView
+        android:id="@+id/textEspada"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#009688"
-        android:text="Volver"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:text="Imagen"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.963" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewMonedas" />
 
     <Button
         android:id="@+id/btnComprarEspada"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#121111"
+        android:text="Comprar"
         android:backgroundTint="#020202"
-        android:text="comprar"
-        app:iconTint="#0D0B0B"
-        tools:layout_editor_absoluteX="234dp"
-        tools:layout_editor_absoluteY="205dp" />
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="@+id/textEspada"
+        app:layout_constraintBottom_toBottomOf="@+id/textEspada"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="24dp" />
+
+    <!-- ESCUDO -->
+    <TextView
+        android:id="@+id/textEscudo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:text="Imagen"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textEspada" />
+
+    <Button
+        android:id="@+id/btnComprarEscudo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comprar"
+        android:backgroundTint="#020202"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="@+id/textEscudo"
+        app:layout_constraintBottom_toBottomOf="@+id/textEscudo"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="24dp" />
+
+    <!-- POCIÓN -->
+    <TextView
+        android:id="@+id/textPocion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:text="Imagen"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textEscudo" />
+
+    <Button
+        android:id="@+id/btnComprarPocion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comprar"
+        android:backgroundTint="#020202"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="@+id/textPocion"
+        app:layout_constraintBottom_toBottomOf="@+id/textPocion"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="24dp" />
+
+    <!-- BOTÓN VOLVER -->
+    <Button
+        android:id="@+id/btnBackToInicioLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tornar"
+        android:backgroundTint="#009688"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
