@@ -12,14 +12,16 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,17 +29,20 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TiendaActivity extends AppCompatActivity {
-    Button btnBackToInicioLogin, btnComprarEspada, btnComprarEscudo, btnComprarPocion;
+    Button btnBackToInicioLogin;
     TextView tvMonedas;
-    Map<String, String> tiendaMap = new HashMap<>();
+    RecyclerView recyclerViewTienda;
+    TiendaAdapter adapter;
+    SharedPreferences sharedPreferences;
 
     ApiService apiService;
-    public static final String BASE_URL = "http://10.0.2.2:8080/dsaApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_tienda);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -46,48 +51,71 @@ public class TiendaActivity extends AppCompatActivity {
             return insets;
         });
 
+
+        sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
+
         btnBackToInicioLogin = findViewById(R.id.btnBackToInicioLogIn);
-        btnComprarEspada = findViewById(R.id.btnComprarEspada);
-        btnComprarEscudo = findViewById(R.id.btnComprarEscudo);
-        btnComprarPocion = findViewById(R.id.btnComprarPocion);
         tvMonedas = findViewById(R.id.textViewMonedas);
+        recyclerViewTienda = findViewById(R.id.recyclerViewTienda);
+        recyclerViewTienda.setLayoutManager(new LinearLayoutManager(this));
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        apiService = retrofit.create(ApiService.class);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(logging);
 
+        apiService = RetrofitClient.getInstance().getMyApi();
+
+        actualizarMonedasUI();
         cargarTienda();
 
-        btnBackToInicioLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TiendaActivity.this, InicioLoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        btnBackToInicioLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(TiendaActivity.this, InicioLoginActivity.class);
+            startActivity(intent);
+            finish();
         });
+    }
 
-        btnComprarEspada.setOnClickListener(new View.OnClickListener() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarDatosUsuario();
+    }
+
+    private void cargarDatosUsuario() {
+        String username = sharedPreferences.getString("username", null);
+        if (username == null) {
+            Toast.makeText(this, "Error: Sesión no iniciada", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Call<User> call = apiService.getUser(username);
+
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onClick(View view) {
-                handleTienda("Espada");
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User usuarioActualizado = response.body();
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("monedas", usuarioActualizado.getMonedas());
+                    editor.apply();
+
+                    actualizarMonedasUI();
+                    Log.d("TiendaActivity", "Datos del usuario actualizados desde la API.");
+
+                } else {
+                    Log.e("TiendaActivity", "Error al cargar datos del usuario: " + response.code());
+                    actualizarMonedasUI();
+                }
             }
-        });
 
-        btnComprarEscudo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                handleTienda("Escudo");
-            }
-        });
-
-        btnComprarPocion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleTienda("Pocion");
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("TiendaActivity", "Fallo de red al cargar datos del usuario.", t);
+                Toast.makeText(TiendaActivity.this, "Fallo de conexión. Mostrando datos locales.", Toast.LENGTH_SHORT).show();
+                actualizarMonedasUI();
             }
         });
     }
@@ -100,23 +128,15 @@ public class TiendaActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<GameObject> objetos = response.body();
 
-                    for (GameObject obj : objetos) {
-                        tiendaMap.put(obj.getNombre(), obj.getId());
-                    }
+                    // Configura el adaptador con la lista de objetos
+                    adapter = new TiendaAdapter(TiendaActivity.this, objetos, gameObject -> {
+                        // Lógica de compra al hacer clic en el botón
+                        handleCompra(gameObject);
+                    });
+                    recyclerViewTienda.setAdapter(adapter);
 
-                    for (GameObject obj : objetos) {
-                        if (obj.getNombre().equals("Espada")) {
-                            btnComprarEspada.setText("Comprar Espada (" + obj.getPrecio() + " monedas)");
-                        } else if (obj.getNombre().equals("Escudo")) {
-                            btnComprarEscudo.setText("Comprar Escudo (" + obj.getPrecio() + " monedas)");
-                        } else if (obj.getNombre().equals("Pocion")) {
-                            btnComprarPocion.setText("Comprar Pocion (" + obj.getPrecio() + " monedas)");
-                        }
-                    }
-
-                    actualizarMonedasUI();
                 } else {
-                    Toast.makeText(TiendaActivity.this, "Error cargando tienda", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TiendaActivity.this, "Error cargando la tienda", Toast.LENGTH_SHORT).show();
                     Log.e("TiendaActivity", "Error cargando tienda: " + response.code());
                 }
             }
@@ -124,65 +144,68 @@ public class TiendaActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<GameObject>> call, Throwable t) {
                 Toast.makeText(TiendaActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("TiendaActivity", "Error en onFailure", t);
+                Log.e("TiendaActivity", "Error en onFailure al cargar tienda", t);
             }
         });
     }
-    private void actualizarMonedasUI() {
-        SharedPreferences prefs = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
-        int monedas = prefs.getInt("monedas", 0);
-        tvMonedas.setText("Monedas: " + monedas);
-    }
 
-    private void handleTienda(String item){
+    private void handleCompra(GameObject item) {
         SharedPreferences prefs = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
         String username = prefs.getString("username", null);
         if (username == null) {
-            Toast.makeText(this, "Error: usuario no logueado", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error: Sesión no iniciada", Toast.LENGTH_LONG).show();
             return;
         }
 
-        String objectId = tiendaMap.get(item);
+        String objectId = item.getId();
         if (objectId == null) {
-            Toast.makeText(this, "Error: objeto no encontrado en la tienda", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error: Objeto no encontrado", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        CompraRequest request = new CompraRequest(username , objectId);
+        CompraRequest request = new CompraRequest(username, objectId);
 
-        Call<User> call = apiService.comprarItem(request);
+        Call<Void> call = apiService.comprarItem(request);
 
-        call.enqueue(new Callback<User>() {
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    // Codi 200
-                    Toast.makeText(TiendaActivity.this,
-                            "Compra realizada.",
-                            Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast.makeText(TiendaActivity.this, item.getNombre() + " comprado con éxito!", Toast.LENGTH_SHORT).show();
 
-                } else if (response.code() == 402) {
-                    // Codi 402
-                    Log.e("TiendaActivity", "Error en onResponse: " + response.code());
-                    Toast.makeText(TiendaActivity.this,
-                            "Error: Monedas insificientes",
-                            Toast.LENGTH_SHORT).show();
+                    int monedasActuales = prefs.getInt("monedas", 0);
+                    int nuevasMonedas = monedasActuales - item.getPrecio();
 
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putInt("monedas", nuevasMonedas);
+                    editor.apply();
+
+                    actualizarMonedasUI();
                 } else {
-                    // Codi 404
-                    Log.e("TiendaActivity", "Error en onResponse: " + response.code());
-                    Toast.makeText(TiendaActivity.this,
-                            "Error: Objeto o usuario no encontrado",
-                            Toast.LENGTH_SHORT).show();
+                    String errorMessage = "Error " + response.code();
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                        }
+                    } catch (Exception e) {
+                        Log.e("TiendaActivity", "Error al parsear el errorBody", e);
+                    }
+                    Toast.makeText(TiendaActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                    Log.e("TiendaActivity", "Error en la compra: " + response.code() + " - " + errorMessage);
                 }
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(TiendaActivity.this, "Fallo de connexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("TiendaActivity", "Error en onFailure", t);
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(TiendaActivity.this, "Fallo de conexión:: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("TiendaActivity", "Error en onFailure al comprar", t);
             }
         });
+    }
+
+
+    private void actualizarMonedasUI() {
+        int monedas = sharedPreferences.getInt("monedas", 0);
+        tvMonedas.setText("Monedas: " + monedas);
     }
 }

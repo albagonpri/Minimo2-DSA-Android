@@ -23,8 +23,6 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin, btnBackToMain;
     ApiService apiService;
 
-    public static final String BASE_URL = "http://10.0.2.2:8080/dsaApp/";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLoginSubmit);
         btnBackToMain = findViewById(R.id.btnBackToMain);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        apiService = retrofit.create(ApiService.class);
+        apiService = RetrofitClient.getInstance().getMyApi();
 
         btnLogin.setOnClickListener(v -> handleLogin());
         btnBackToMain.setOnClickListener(v -> {
@@ -54,12 +47,14 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
 
         if (input.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Introdueix usuari/email i contrasenya", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Introduce usuario y contraseña", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        String inputMinuscula = input.toLowerCase();
+
         Credentials credentials = new Credentials();
-        credentials.setNombre(input);
+        credentials.setNombre(inputMinuscula);
         credentials.setPassword(password);
 
         Call<User> call = apiService.loginUser(credentials);
@@ -69,13 +64,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
                     User user = response.body();
-                    Toast.makeText(LoginActivity.this, "Sessió iniciada! Benvingut " + user.getNombre(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Sesión iniciada. ¡Bienvenido " + user.getNombre(), Toast.LENGTH_LONG).show();
 
                     // Guardar dades localment
                     SharedPreferences sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                    editor.putString("username", user.getNombre());
+                    editor.putString("username", user.getNombre().toLowerCase());
                     //editor.putString("userId", user.getId());
                     editor.putInt("monedas", user.getMonedas());
                     editor.putInt("vidaInicial", user.getVidaInicial());
@@ -86,13 +81,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else {
                     Log.e("LoginActivity", "Error onResponse: " + response.code());
-                    Toast.makeText(LoginActivity.this, "Error: Usuari o contrasenya incorrectes", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Error: Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Fallo de connexió: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("LoginActivity", "Error onFailure", t);
             }
         });

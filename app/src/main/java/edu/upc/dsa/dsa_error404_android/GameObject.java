@@ -1,24 +1,29 @@
 package edu.upc.dsa.dsa_error404_android;
+import com.google.gson.annotations.SerializedName;
 
 public class GameObject {
-    private String Id;
+
+    @SerializedName("id")
+    private String id;
     private String nombre;
     private int precio;
+
+    private String descripcion;
     public GameObject() {
     }
 
     public GameObject(String objectId, String nombre, int precio) {
-        this.Id = objectId;
+        this.id = objectId;
         this.nombre = nombre;
         this.precio = precio;
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        this.Id = id;
+        this.id = id;
     }
 
     public String getNombre() {
@@ -35,5 +40,13 @@ public class GameObject {
 
     public void setPrecio(int precio) {
         this.precio = precio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

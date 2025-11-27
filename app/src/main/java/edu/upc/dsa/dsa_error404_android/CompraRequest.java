@@ -1,28 +1,32 @@
 package edu.upc.dsa.dsa_error404_android;
+import com.google.gson.annotations.SerializedName;
 
 public class CompraRequest {
-    private String userName;
-    private String ItemName;
 
-    public CompraRequest(String userName, String ItemName) {
-        this.userName = userName;
-        this.ItemName = ItemName;
+    @SerializedName("nombre")
+    private String nombre;
+
+    @SerializedName("objectId")
+    private String objectId;
+
+    public CompraRequest(String nombre, String objectId) {
+        this.nombre = nombre;
+        this.objectId = objectId;
     }
 
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
     public String getUserName() {
-        return userName;
+        return nombre;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getItemName (){
-        return ItemName;
-    }
-
-    public void setItemName(String itemName){
-        this.ItemName = itemName;
+        this.nombre = nombre;
     }
 }
 

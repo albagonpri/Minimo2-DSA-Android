@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:background="@drawable/edittext_neon_bg"
-        android:hint="Usuario o email"
+        android:hint="Usuario"
         android:inputType="text"
         android:padding="12dp"
         android:textAlignment="center"

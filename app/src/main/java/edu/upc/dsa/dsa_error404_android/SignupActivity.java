@@ -21,29 +21,20 @@ public class SignupActivity extends AppCompatActivity {
     Button btnSignUp, btnBackToMain;
     ApiService apiService;
 
-    public static final String BASE_URL = "http://10.0.2.2:8080/dsaApp/";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        // Assignació de components
         etUsuari = findViewById(R.id.editUsuari);
         etEmail = findViewById(R.id.editEmail);
         etPassword = findViewById(R.id.EditPassword);
-        etRepeatPassword = findViewById(R.id.editRepeatPassword);
+        etRepeatPassword = findViewById(R.id.editPassword2);
 
         btnSignUp = findViewById(R.id.SignUp);
         btnBackToMain = findViewById(R.id.btnBackToMain);
 
-        // Configurar Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        apiService = retrofit.create(ApiService.class);
+        apiService = RetrofitClient.getInstance().getMyApi();
 
         btnSignUp.setOnClickListener(v -> handleSignUp());
         btnBackToMain.setOnClickListener(v -> {
@@ -58,32 +49,31 @@ public class SignupActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
         String repeatPassword = etRepeatPassword.getText().toString();
 
-        // Validació bàsica
         if (usuari.isEmpty() || email.isEmpty() || password.isEmpty() || repeatPassword.isEmpty()) {
             Toast.makeText(this, "Omple tots els camps.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Validació email
         String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
         if (!email.matches(emailRegex)) {
             Toast.makeText(this, "El format del correu no és vàlid.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Validació contrasenyes
         if (!password.equals(repeatPassword)) {
             Toast.makeText(this, "Les contrasenyes no coincideixen.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Crear objecte credentials
+        String emailMinuscula = email.toLowerCase();
+
+        String usuariMinuscula = usuari.toLowerCase();
+
         Credentials credentials = new Credentials();
-        credentials.setNombre(usuari);
-        credentials.setEmail(email);
+        credentials.setNombre(usuariMinuscula);
+        credentials.setEmail(emailMinuscula);
         credentials.setPassword(password);
 
-        // Crida al servidor
         Call<User> call = apiService.registerUser(credentials);
         call.enqueue(new Callback<User>() {
             @Override

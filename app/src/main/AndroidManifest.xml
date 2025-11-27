@@ -15,6 +15,9 @@
         android:theme="@style/Theme.DSA_Error404_Android"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".InventarioActivity"
+            android:exported="false" />
+        <activity
             android:name=".InicioLoginActivity"
             android:exported="false" />
         <activity
@@ -25,6 +28,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
