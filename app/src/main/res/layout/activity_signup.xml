@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#009688"
         android:fontFamily="sans-serif-smallcaps"
-        android:text="Sign Up"
+        android:text="Registrarse"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
