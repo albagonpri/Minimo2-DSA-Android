@@ -31,6 +31,7 @@ public class InventarioAdapter extends RecyclerView.Adapter<InventarioAdapter.Vi
         GameObject gameObject = userObjects.get(position);
         holder.tvObjectName.setText(gameObject.getNombre());
         holder.tvObjectDescription.setText(gameObject.getDescripcion());
+        holder.tvObjectQuantity.setText("x" + gameObject.getCantidad());
     }
 
     @Override
@@ -42,10 +43,13 @@ public class InventarioAdapter extends RecyclerView.Adapter<InventarioAdapter.Vi
         TextView tvObjectName;
         TextView tvObjectDescription;
 
+        TextView tvObjectQuantity;
+
         ViewHolder(View itemView) {
             super(itemView);
             tvObjectName = itemView.findViewById(R.id.textViewObjectName);
             tvObjectDescription = itemView.findViewById(R.id.textViewObjectDescription);
+            tvObjectQuantity = itemView.findViewById(R.id.textViewObjectQuantity);
         }
     }
 }
