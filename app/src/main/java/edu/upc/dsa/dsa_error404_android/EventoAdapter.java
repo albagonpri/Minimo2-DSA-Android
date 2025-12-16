@@ -19,8 +19,8 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
         void onClick(Evento evento);
     }
 
-    private final List<Evento> eventos;
     private final Context context;
+    private final List<Evento> eventos;
     private final OnInscribirseClick listener;
 
     public EventoAdapter(Context context, List<Evento> eventos, OnInscribirseClick listener) {
@@ -44,6 +44,18 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
         holder.descripcion.setText(evento.getDescription());
         holder.fechaInicio.setText(evento.getStartDate());
         holder.fechaFin.setText(evento.getEndDate());
+
+        int resId = context.getResources().getIdentifier(
+                "evento_" + evento.getId(),
+                "drawable",
+                context.getPackageName()
+        );
+
+        if (resId != 0) {
+            holder.imagen.setImageResource(resId);
+        } else {
+            holder.imagen.setImageResource(android.R.color.transparent);
+        }
 
         holder.inscribirseBtn.setOnClickListener(v -> {
             if (listener != null) listener.onClick(evento);
@@ -75,4 +87,5 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
         }
     }
 }
+
 

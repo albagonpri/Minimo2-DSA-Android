@@ -25,6 +25,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -40,12 +41,13 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-}
-
-dependencies {
-    implementation("androidx.core:core-splashscreen:1.0.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 }
