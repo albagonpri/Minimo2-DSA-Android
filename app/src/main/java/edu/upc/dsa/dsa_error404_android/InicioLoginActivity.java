@@ -19,6 +19,7 @@ public class InicioLoginActivity extends AppCompatActivity {
     Button buttonTienda;
     Button buttonLogOut;
     Button buttonInventario;
+    Button buttonEventos;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -60,6 +61,11 @@ public class InicioLoginActivity extends AppCompatActivity {
 
         buttonInventario.setOnClickListener(v -> {
             Intent intent = new Intent(InicioLoginActivity.this, InventarioActivity.class);
+            startActivity(intent);
+        });
+        buttonEventos=findViewById(R.id.eventosbtn);
+        buttonEventos.setOnClickListener(v -> {
+            Intent intent = new Intent(InicioLoginActivity.this, EventosActivity.class);
             startActivity(intent);
         });
     }

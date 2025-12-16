@@ -1,0 +1,20 @@
+package edu.upc.dsa.dsa_error404_android;
+
+public class RegistroEventoRequest {
+    private String userId;
+
+    public RegistroEventoRequest() {
+    }
+
+    public RegistroEventoRequest(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+}

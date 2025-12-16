@@ -10,6 +10,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
+
     @POST("game/users/register")
     Call<User> registerUser(@Body Credentials credentials);
 
@@ -28,4 +29,9 @@ public interface ApiService {
     @GET("game/users/objects/list")
     Call<List<GameObject>> getUserObjects(@Query("nombre") String nombre);
 
+    @GET("eventos")
+    Call<List<Evento>> getEventos();
+
+    @POST("eventos/{id}/register")
+    Call<Void> registerEvento(@Path("id") String id, @Body RegistroEventoRequest registroEventoRequest);
 }
