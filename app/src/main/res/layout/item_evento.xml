@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#6B009688"
+    android:backgroundTint="#77009688"
     android:padding="12dp">
 
     <ImageView
@@ -17,52 +19,57 @@
         android:id="@+id/eventName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:maxLines="1"
+        android:layout_marginStart="12dp"
         android:ellipsize="end"
-        app:layout_constraintStart_toEndOf="@id/eventImage"
+        android:fontFamily="sans-serif-smallcaps"
+        android:maxLines="1"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/eventImage"
-        android:layout_marginStart="12dp" />
+        app:layout_constraintStart_toEndOf="@id/eventImage"
+        app:layout_constraintTop_toTopOf="@id/eventImage" />
 
     <TextView
         android:id="@+id/eventDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="2"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
-        app:layout_constraintStart_toStartOf="@id/eventName"
+        android:maxLines="2"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventName"
-        android:layout_marginTop="4dp" />
+        app:layout_constraintStart_toStartOf="@id/eventName"
+        app:layout_constraintTop_toBottomOf="@id/eventName" />
 
     <TextView
         android:id="@+id/eventStartDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/eventName"
+        android:layout_marginTop="6dp"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventDescription"
-        android:layout_marginTop="6dp" />
+        app:layout_constraintStart_toStartOf="@id/eventName"
+        app:layout_constraintTop_toBottomOf="@id/eventDescription" />
 
     <TextView
         android:id="@+id/eventEndDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/eventName"
+        android:layout_marginTop="2dp"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventStartDate"
-        android:layout_marginTop="2dp" />
+        app:layout_constraintStart_toStartOf="@id/eventName"
+        app:layout_constraintTop_toBottomOf="@id/eventStartDate" />
 
     <Button
         android:id="@+id/eventButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:backgroundTint="#009688"
         android:text="Inscribirse"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventEndDate"
-        android:layout_marginTop="10dp" />
+        app:layout_constraintTop_toBottomOf="@id/eventEndDate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
